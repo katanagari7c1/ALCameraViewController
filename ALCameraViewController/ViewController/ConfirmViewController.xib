@@ -11,9 +11,9 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ConfirmViewController" customModule="ALCameraViewController" customModuleProvider="target">
             <connections>
-                <outlet property="cancelButton" destination="yRi-ES-LfN" id="PUm-mc-H7R"/>
+                <outlet property="cancelButton" destination="ASf-ZD-cIs" id="6oY-wQ-X0I"/>
                 <outlet property="centeringView" destination="KYd-D9-K5d" id="CmX-BA-VtZ"/>
-                <outlet property="confirmButton" destination="ASf-ZD-cIs" id="mpH-Eg-IbA"/>
+                <outlet property="confirmButton" destination="yRi-ES-LfN" id="sa6-Gr-giD"/>
                 <outlet property="cropOverlay" destination="lnA-tb-Sap" id="34E-zk-Axd"/>
                 <outlet property="scrollView" destination="oUR-U3-uEM" id="rF0-ZM-RmA"/>
                 <outlet property="view" destination="iN0-l3-epB" id="FcS-Dy-kqF"/>
@@ -33,7 +33,7 @@
                         <constraint firstAttribute="height" constant="64" id="J7n-mn-Ebe"/>
                         <constraint firstAttribute="width" constant="64" id="YWt-e6-Bvy"/>
                     </constraints>
-                    <state key="normal" image="confirmButton"/>
+                    <state key="normal" image="button_cancel"/>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yRi-ES-LfN">
                     <rect key="frame" x="328" y="526" width="44" height="44"/>
@@ -41,7 +41,7 @@
                         <constraint firstAttribute="height" constant="64" id="FdJ-mW-Tx6"/>
                         <constraint firstAttribute="width" constant="64" id="urS-JS-i1S"/>
                     </constraints>
-                    <state key="normal" image="retakeButton"/>
+                    <state key="normal" image="button_accept"/>
                 </button>
                 <view hidden="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KYd-D9-K5d">
                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
@@ -54,6 +54,12 @@
                         <constraint firstAttribute="width" secondItem="lnA-tb-Sap" secondAttribute="height" multiplier="1:1" id="lv8-l9-lJq"/>
                     </constraints>
                 </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Original photo" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eRE-v1-6Zk">
+                    <rect key="frame" x="186" y="357" width="42" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="35"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
@@ -87,6 +93,7 @@
                 <constraint firstItem="lnA-tb-Sap" firstAttribute="centerX" secondItem="KYd-D9-K5d" secondAttribute="centerX" id="hpa-Qn-uzT"/>
                 <constraint firstItem="ASf-ZD-cIs" firstAttribute="top" secondItem="KYd-D9-K5d" secondAttribute="bottom" id="iar-0y-gBe"/>
                 <constraint firstAttribute="bottom" secondItem="oUR-U3-uEM" secondAttribute="bottom" id="iw9-Cg-Kkk"/>
+                <constraint firstItem="eRE-v1-6Zk" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="40" id="jUA-FZ-l6x"/>
                 <constraint firstItem="oUR-U3-uEM" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="kDN-mM-6KE"/>
                 <constraint firstItem="yRi-ES-LfN" firstAttribute="leading" secondItem="ASf-ZD-cIs" secondAttribute="trailing" constant="60" id="m1F-XR-hgU"/>
                 <constraint firstAttribute="trailing" secondItem="oUR-U3-uEM" secondAttribute="trailing" id="mL3-PM-TEd"/>
@@ -99,6 +106,7 @@
                 <constraint firstItem="KYd-D9-K5d" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="wn3-We-BBK"/>
                 <constraint firstItem="yRi-ES-LfN" firstAttribute="top" secondItem="ASf-ZD-cIs" secondAttribute="top" id="xFS-1L-oa4"/>
                 <constraint firstItem="yRi-ES-LfN" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" constant="45" id="xFc-F1-V7I"/>
+                <constraint firstItem="eRE-v1-6Zk" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="zXz-W6-LoP"/>
             </constraints>
             <variation key="default">
                 <mask key="constraints">
@@ -203,7 +211,7 @@
         </view>
     </objects>
     <resources>
-        <image name="confirmButton" width="44" height="44"/>
-        <image name="retakeButton" width="44" height="44"/>
+        <image name="button_accept" width="44" height="44"/>
+        <image name="button_cancel" width="44" height="44"/>
     </resources>
 </document>
