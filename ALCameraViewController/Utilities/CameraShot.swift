@@ -11,16 +11,16 @@ import AVFoundation
 
 public typealias CameraShotCompletion = (UIImage?) -> Void
 
-public func takePhoto(_ stillImageOutput: AVCaptureStillImageOutput, videoOrientation: AVCaptureVideoOrientation, cropSize: CGSize, completion: @escaping CameraShotCompletion) {
+public func takePhoto(stillImageOutput: AVCaptureStillImageOutput, videoOrientation: AVCaptureVideoOrientation, cropSize: CGSize, completion: CameraShotCompletion) {
     
-    guard let videoConnection: AVCaptureConnection = stillImageOutput.connection(withMediaType: AVMediaTypeVideo) else {
+    guard let videoConnection: AVCaptureConnection = stillImageOutput.connectionWithMediaType( AVMediaTypeVideo) else {
         completion(nil)
         return
     }
     
     videoConnection.videoOrientation = videoOrientation
     
-    stillImageOutput.captureStillImageAsynchronously(from: videoConnection, completionHandler: { buffer, error in
+    stillImageOutput.captureStillImageAsynchronouslyFromConnection(videoConnection, completionHandler: { buffer, error in
         
         guard let buffer = buffer,
             let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(buffer),

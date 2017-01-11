@@ -24,27 +24,27 @@ public class SingleImageFetcher {
     
     public init() { }
     
-    public func onSuccess(_ success: @escaping SingleImageFetcherSuccess) -> Self {
+    public func onSuccess(success: SingleImageFetcherSuccess) -> Self {
         self.success = success
         return self
     }
     
-    public func onFailure(_ failure: @escaping SingleImageFetcherFailure) -> Self {
+    public func onFailure(failure: SingleImageFetcherFailure) -> Self {
         self.failure = failure
         return self
     }
     
-    public func setAsset(_ asset: PHAsset) -> Self {
+    public func setAsset(asset: PHAsset) -> Self {
         self.asset = asset
         return self
     }
     
-    public func setTargetSize(_ targetSize: CGSize) -> Self {
+    public func setTargetSize(targetSize: CGSize) -> Self {
         self.targetSize = targetSize
         return self
     }
     
-    public func setCropRect(_ cropRect: CGRect) -> Self {
+    public func setCropRect(cropRect: CGRect) -> Self {
         self.cropRect = cropRect
         return self
     }
@@ -69,13 +69,13 @@ public class SingleImageFetcher {
         }
         
         let options = PHImageRequestOptions()
-        options.deliveryMode = .highQualityFormat
-        options.isNetworkAccessAllowed = true
+        options.deliveryMode = .HighQualityFormat
+        options.networkAccessAllowed = true
 
         if let cropRect = cropRect {
 
             options.normalizedCropRect = cropRect
-            options.resizeMode = .exact
+            options.resizeMode = .Exact
             
             let targetWidth = floor(CGFloat(asset.pixelWidth) * cropRect.width)
             let targetHeight = floor(CGFloat(asset.pixelHeight) * cropRect.height)
@@ -84,7 +84,7 @@ public class SingleImageFetcher {
             targetSize = CGSize(width: dimension, height: dimension)
         }
         
-        PHImageManager.default().requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFill, options: options) { image, _ in
+        PHImageManager.defaultManager().requestImageForAsset(asset, targetSize: targetSize, contentMode: .AspectFill, options: options) { image, _ in
             if let image = image {
                 self.success?(image)
             } else {

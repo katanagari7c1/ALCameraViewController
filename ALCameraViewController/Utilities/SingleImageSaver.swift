@@ -22,17 +22,17 @@ public class SingleImageSaver {
     
     public init() { }
     
-    public func onSuccess(_ success: @escaping SingleImageSaverSuccess) -> Self {
+    public func onSuccess(success: SingleImageSaverSuccess) -> Self {
         self.success = success
         return self
     }
     
-    public func onFailure(_ failure: @escaping SingleImageSaverFailure) -> Self {
+    public func onFailure(failure: SingleImageSaverFailure) -> Self {
         self.failure = failure
         return self
     }
     
-    public func setImage(_ image: UIImage) -> Self {
+    public func setImage(image: UIImage) -> Self {
         self.image = image
         return self
     }
@@ -58,13 +58,13 @@ public class SingleImageSaver {
         
         var assetIdentifier: PHObjectPlaceholder?
         
-        PHPhotoLibrary.shared()
+        PHPhotoLibrary.sharedPhotoLibrary()
             .performChanges({
-                let request = PHAssetChangeRequest.creationRequestForAsset(from: image)
+                let request = PHAssetChangeRequest.creationRequestForAssetFromImage(image)
                 assetIdentifier = request.placeholderForCreatedAsset
             }) { finished, error in
                 
-                guard let assetIdentifier = assetIdentifier, finished else {
+                guard let assetIdentifier = assetIdentifier where finished else {
                     self.invokeFailure()
                     return
                 }
@@ -73,12 +73,12 @@ public class SingleImageSaver {
         }
     }
     
-    private func fetch(_ assetIdentifier: PHObjectPlaceholder) {
+    private func fetch(assetIdentifier: PHObjectPlaceholder) {
         
-        let assets = PHAsset.fetchAssets(withLocalIdentifiers: [assetIdentifier.localIdentifier], options: nil)
+        let assets = PHAsset.fetchAssetsWithLocalIdentifiers([assetIdentifier.localIdentifier], options: nil)
         
-        DispatchQueue.main.async {
-            guard let asset = assets.firstObject else {
+        dispatch_async(dispatch_get_main_queue()) {
+            guard let asset = assets.firstObject as? PHAsset else {
                 self.invokeFailure()
                 return
             }

@@ -13,11 +13,11 @@ internal let ImageCellIdentifier = "ImageCell"
 
 internal let defaultItemSpacing: CGFloat = 1
 
-public typealias PhotoLibraryViewSelectionComplete = (PHAsset?) -> Void
+public typealias PhotoLibraryViewSelectionComplete = (asset: PHAsset?) -> Void
 
 public class PhotoLibraryViewController: UIViewController {
     
-    internal var assets: PHFetchResult<PHAsset>? = nil
+    internal var assets: PHFetchResult? = nil
     
     public var onSelectionComplete: PhotoLibraryViewSelectionComplete?
     
@@ -27,11 +27,11 @@ public class PhotoLibraryViewController: UIViewController {
         layout.itemSize = CameraGlobals.shared.photoLibraryThumbnailSize
         layout.minimumInteritemSpacing = defaultItemSpacing
         layout.minimumLineSpacing = defaultItemSpacing
-        layout.sectionInset = UIEdgeInsets.zero
+        layout.sectionInset = UIEdgeInsetsZero
       
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = UIColor.clear
+        collectionView.backgroundColor = UIColor.clearColor()
         return collectionView
     }()
     
@@ -40,10 +40,10 @@ public class PhotoLibraryViewController: UIViewController {
         
         setNeedsStatusBarAppearanceUpdate()
         
-        let buttonImage = UIImage(named: "libraryCancel", in: CameraGlobals.shared.bundle, compatibleWith: nil)?.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
+        let buttonImage = UIImage(named: "libraryCancel", inBundle: CameraGlobals.shared.bundle, compatibleWithTraitCollection: nil)?.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal)
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: buttonImage,
-                                                           style: UIBarButtonItemStyle.plain,
+                                                           style: UIBarButtonItemStyle.Plain,
                                                            target: self,
                                                            action: #selector(dismissLibrary))
         
@@ -61,27 +61,27 @@ public class PhotoLibraryViewController: UIViewController {
         collectionView.frame = view.bounds
     }
     
-    public override var preferredStatusBarStyle: UIStatusBarStyle {
-        return UIStatusBarStyle.lightContent
+    public override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return UIStatusBarStyle.LightContent
     }
     
-    public func present(_ inViewController: UIViewController, animated: Bool) {
+    public func present(inViewController: UIViewController, animated: Bool) {
         let navigationController = UINavigationController(rootViewController: self)
-        navigationController.navigationBar.barTintColor = UIColor.black
-        navigationController.navigationBar.barStyle = UIBarStyle.black
-        inViewController.present(navigationController, animated: animated, completion: nil)
+        navigationController.navigationBar.barTintColor = UIColor.blackColor()
+        navigationController.navigationBar.barStyle = UIBarStyle.Black
+        inViewController.presentViewController(navigationController, animated: animated, completion: nil)
     }
     
     public func dismissLibrary() {
-        onSelectionComplete?(nil)
+		onSelectionComplete?(asset: nil)
     }
     
-    private func onSuccess(_ photos: PHFetchResult<PHAsset>) {
+    private func onSuccess(photos: PHFetchResult) {
         assets = photos
         configureCollectionView()
     }
     
-    private func onFailure(_ error: NSError) {
+    private func onFailure(error: NSError) {
         let permissionsView = PermissionsView(frame: view.bounds)
         permissionsView.titleLabel.text = localizedString("permissions.library.title")
         permissionsView.descriptionLabel.text = localizedString("permissions.library.description")
@@ -90,23 +90,23 @@ public class PhotoLibraryViewController: UIViewController {
     }
     
     private func configureCollectionView() {
-        collectionView.register(ImageCell.self, forCellWithReuseIdentifier: ImageCellIdentifier)
+        collectionView.registerClass(ImageCell.self, forCellWithReuseIdentifier: ImageCellIdentifier)
         collectionView.delegate = self
         collectionView.dataSource = self
     }
     
-    internal func itemAtIndexPath(_ indexPath: IndexPath) -> PHAsset? {
-        return assets?[(indexPath as NSIndexPath).row]
+    internal func itemAtIndexPath(indexPath: NSIndexPath) -> PHAsset? {
+        return assets?[indexPath.row] as? PHAsset
     }
 }
 
 // MARK: - UICollectionViewDataSource -
 extension PhotoLibraryViewController : UICollectionViewDataSource {
-    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    public func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return assets?.count ?? 0
     }
 
-    @objc(collectionView:willDisplayCell:forItemAtIndexPath:) public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+    public func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
         if cell is ImageCell {
             if let model = itemAtIndexPath(indexPath) {
                 (cell as! ImageCell).configureWithModel(model)
@@ -114,14 +114,14 @@ extension PhotoLibraryViewController : UICollectionViewDataSource {
         }
     }
 
-    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return collectionView.dequeueReusableCell(withReuseIdentifier: ImageCellIdentifier, for: indexPath)
+    public func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        return collectionView.dequeueReusableCellWithReuseIdentifier(ImageCellIdentifier, forIndexPath: indexPath)
     }
 }
 
 // MARK: - UICollectionViewDelegate -
 extension PhotoLibraryViewController : UICollectionViewDelegateFlowLayout {
-    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        onSelectionComplete?(itemAtIndexPath(indexPath))
+    public func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+		onSelectionComplete?(asset: itemAtIndexPath(indexPath))
     }
 }

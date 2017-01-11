@@ -9,7 +9,7 @@
 import UIKit
 import Photos
 
-public typealias ImageFetcherSuccess = (PHFetchResult<PHAsset>) -> ()
+public typealias ImageFetcherSuccess = (PHFetchResult) -> ()
 public typealias ImageFetcherFailure = (NSError) -> ()
 
 //extension PHFetchResult: Sequence {
@@ -25,17 +25,17 @@ public class ImageFetcher {
     
     private var authRequested = false
     private let errorDomain = "com.zero.imageFetcher"
-    
-    let libraryQueue = DispatchQueue(label: "com.zero.ALCameraViewController.LibraryQueue");
-    
+
+    let libraryQueue = dispatch_queue_create("com.zero.ALCameraViewController.LibraryQueue", DISPATCH_QUEUE_SERIAL);
+	
     public init() { }
     
-    public func onSuccess(_ success: @escaping ImageFetcherSuccess) -> Self {
+    public func onSuccess(success: ImageFetcherSuccess) -> Self {
         self.success = success
         return self
     }
     
-    public func onFailure(_ failure: @escaping ImageFetcherFailure) -> Self {
+    public func onFailure(failure: ImageFetcherFailure) -> Self {
         self.failure = failure
         return self
     }
@@ -54,9 +54,9 @@ public class ImageFetcher {
     private func onAuthorized() {
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-        libraryQueue.async {
-            let assets = PHAsset.fetchAssets(with: PHAssetMediaType.image, options: options)
-            DispatchQueue.main.async {
+		dispatch_async(libraryQueue) {
+            let assets = PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: options)
+            dispatch_async(dispatch_get_main_queue()) {
                 self.success?(assets)
             }
         }

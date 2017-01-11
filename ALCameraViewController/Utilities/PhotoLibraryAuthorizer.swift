@@ -17,9 +17,9 @@ class PhotoLibraryAuthorizer {
 
     private let completion: PhotoLibraryAuthorizerCompletion
 
-    init(completion: @escaping PhotoLibraryAuthorizerCompletion) {
+    init(completion: PhotoLibraryAuthorizerCompletion) {
         self.completion = completion
-        handleAuthorization(status: PHPhotoLibrary.authorizationStatus())
+        handleAuthorization(PHPhotoLibrary.authorizationStatus())
     }
     
     func onDeniedOrRestricted(completion: PhotoLibraryAuthorizerCompletion) {
@@ -29,17 +29,17 @@ class PhotoLibraryAuthorizer {
     
     func handleAuthorization(status: PHAuthorizationStatus) {
         switch status {
-        case .notDetermined:
+        case .NotDetermined:
             PHPhotoLibrary.requestAuthorization(handleAuthorization)
             break
-        case .authorized:
-            DispatchQueue.main.async {
+        case .Authorized:
+            dispatch_async(dispatch_get_main_queue()) {
                 self.completion(nil)
             }
             break
-        case .denied, .restricted:
-            DispatchQueue.main.async {
-                self.onDeniedOrRestricted(completion: self.completion)
+        case .Denied, .Restricted:
+            dispatch_async(dispatch_get_main_queue()) {
+                self.onDeniedOrRestricted(self.completion)
             }
             break
         }

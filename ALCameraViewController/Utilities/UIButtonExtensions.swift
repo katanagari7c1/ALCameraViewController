@@ -18,18 +18,18 @@ extension UIButton {
     
     private class ActionWrapper {
         let action: ButtonAction
-        init(action: @escaping ButtonAction) {
+        init(action: ButtonAction) {
             self.action = action
         }
     }
     
     var action: ButtonAction? {
         set(newValue) {
-            removeTarget(self, action: #selector(performAction), for: .touchUpInside)
+            removeTarget(self, action: #selector(performAction), forControlEvents: .TouchUpInside)
             var wrapper: ActionWrapper? = nil
             if let newValue = newValue {
                 wrapper = ActionWrapper(action: newValue)
-                addTarget(self, action: #selector(performAction), for: .touchUpInside)
+                addTarget(self, action: #selector(performAction), forControlEvents: .TouchUpInside)
             }
             
             objc_setAssociatedObject(self, &AssociatedKeys.ActionKey, wrapper, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)

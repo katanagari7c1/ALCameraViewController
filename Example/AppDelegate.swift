@@ -13,10 +13,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
-        let viewController = ViewController(nibName: "ViewController", bundle: Bundle.main)
+	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        let viewController = ViewController(nibName: "ViewController", bundle: NSBundle.mainBundle())
         
-        window = UIWindow(frame: UIScreen.main.bounds)
+        window = UIWindow(frame: UIScreen.mainScreen().bounds)
         window!.rootViewController = viewController
         window!.makeKeyAndVisible()
         return true

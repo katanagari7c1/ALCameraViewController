@@ -97,7 +97,7 @@ internal class CropOverlay: UIView {
             corner[1].frame = horizontalFrame
         }
         
-        let lineThickness = lineWidth / UIScreen.main.scale
+        let lineThickness = lineWidth / UIScreen.mainScreen().scale
         let padding = (bounds.height - (lineThickness * CGFloat(horizontalLines.count))) / CGFloat(horizontalLines.count + 1)
         
         for i in 0..<horizontalLines.count {
@@ -123,12 +123,12 @@ internal class CropOverlay: UIView {
         bottomLeftCornerLines = [createLine(), createLine()]
         bottomRightCornerLines = [createLine(), createLine()]
         
-        isUserInteractionEnabled = false
+        userInteractionEnabled = false
     }
     
     func createLine() -> UIView {
         let line = UIView()
-        line.backgroundColor = UIColor.white
+        line.backgroundColor = UIColor.whiteColor()
         addSubview(line)
         return line
     }
